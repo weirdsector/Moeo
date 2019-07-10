@@ -3,22 +3,18 @@ package moeo.moeo;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
@@ -26,19 +22,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,20 +37,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -92,8 +76,6 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private static final String TAG = "ChatActivity";
 
     private ImageButton settingBtn;
-    private ImageView preview;
-
 
     boolean isLandScape;
 
@@ -122,11 +104,10 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
  		if (mNfcAdapter == null) {
             // NFC 미지원단말
             Toast.makeText(getApplicationContext(), "NFC를 지원하지 않는 단말기입니다.", Toast.LENGTH_SHORT).show();
-            return;
+         } else {
+            mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+            getNFCData(getIntent());
         }
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        getNFCData(getIntent());
-
 
         //chat setting
         m_Adapter = new CustomAdapter(1);
@@ -147,10 +128,6 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
         });
 
-        preview = (ImageView) findViewById(R.id.previewPane);
-        if (preview == null) {
-            Log.d(TAG, "Preview is null");
-        }
 
         settingBtn = (ImageButton) findViewById(R.id.setting_btn);
         settingBtn.setOnClickListener(new View.OnClickListener() {
@@ -182,12 +159,14 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
 
         filters = new IntentFilter[] { filter, };
+        if(mNfcAdapter!=null)
         mNfcAdapter.enableForegroundDispatch(this, pIntent, filters, null);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if(mNfcAdapter!=null)
         mNfcAdapter.disableForegroundDispatch(this);
     }
 
@@ -280,7 +259,7 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
     }
     public void post(String requestURL, String message) {
-        message= "{content:딸기,user_id:user_1}";
+        message= "{\"content\":\""+message+"\",\"user_id\":\"user_1\"}";
         try{
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -298,7 +277,19 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    System.out.println("Response Body is " + response.body().string());
+                    String result =  response.body().string();
+                    try {
+                        JsonParser parser = new JsonParser();
+                        Object obj = parser.parse( result );
+                        JsonObject object = (JsonObject)obj;
+                       String answer = object.get("text").toString();
+                        answer = URLDecoder.decode(answer);
+                       text = answer;
+                        handler.sendEmptyMessage(0);
+
+                    } catch (JsonParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -306,7 +297,13 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
             System.err.println(e.toString());
         }
     }
-
+    final Handler handler = new Handler()
+    {
+        public void handleMessage(Message msg)
+        {
+            speakOut();
+        }
+    };
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
