@@ -63,17 +63,7 @@
         </ImageView>
 
 
-        <moeo.moeo.common.GraphicOverlay
-            android:id="@+id/previewOverlay"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="0dp"
-            android:visibility="invisible" />
+
         <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
