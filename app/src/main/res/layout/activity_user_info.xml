@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="moeo.moeo.UserInfoActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#fff"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:isScrollContainer="true"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+                    <EditText
+                        android:id="@+id/inputName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border"
+                        android:layout_gravity="center_horizontal"
+                        android:hint="이름을 입력하세요."
+                        android:inputType="textPersonName"
+                        android:padding="15dp" />
+
+
+                    <ImageButton
+                        android:id="@+id/profileBtn"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@null"
+                        android:padding="10dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/main_profile" />
+                    <TextView
+                        android:id="@+id/gender_guide"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="성별"
+                        android:layout_marginTop="20dp"
+                        android:textColor="#555"
+                        android:textSize="18sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+                    <CheckBox
+                        android:id="@+id/boy_selected"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="15dp"
+                        android:background="@drawable/gender_style"
+                        android:gravity="center_horizontal"
+                        android:button="@android:color/transparent"
+                        android:checked="true"
+                        android:text="남자아이" />
+
+                    <CheckBox
+                        android:id="@+id/girl_selected"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="15dp"
+                        android:gravity="center_horizontal"
+                        android:background="@drawable/gender_style"
+                        android:button="@android:color/transparent"
+                        android:checked="false"
+                        android:text="여자아이" />
+                </LinearLayout>
+                    <TextView
+                        android:id="@+id/textView01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="성격/특징"
+                        android:layout_marginTop="15dp"
+                        android:textColor="#555"
+                        android:textSize="18sp" />
+                    <Spinner
+                        android:id="@+id/spinner_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/gender_not_selected"
+                        android:padding="15dp"
+                        android:gravity="center_horizontal"
+                        android:entries="@array/type"
+                        android:textSize="22sp" />
+                    <TextView
+                        android:id="@+id/birthday_guide"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="생일"
+                        android:layout_marginTop="15dp"
+                        android:textColor="#555"
+                        android:textSize="18sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/inputYear"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="15dp"
+                        android:padding="15dp"
+                        android:background="@drawable/border"
+                        android:ems="10"
+                        android:hint="년"
+                        android:gravity="right"
+                        android:inputType="number"
+                        android:textSize="18sp" />
+                    <EditText
+                        android:id="@+id/inputMonth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="15dp"
+                        android:padding="15dp"
+                        android:background="@drawable/border"
+                        android:ems="10"
+                        android:hint="월"
+                        android:gravity="right"
+                        android:inputType="number"
+                        android:textSize="18sp" />
+                    <EditText
+                        android:id="@+id/inputDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="15dp"
+                        android:padding="15dp"
+                        android:background="@drawable/border"
+                        android:ems="10"
+                        android:hint="일"
+                        android:gravity="right"
+                        android:inputType="number"
+                        android:textSize="18sp" />
+                </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/like_guide"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="좋아요."
+                            android:layout_marginTop="20dp"
+                            android:textColor="#555"
+                            android:textSize="18sp" />
+                        <EditText
+                            android:id="@+id/inputFa0"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/border"
+                            android:ems="10"
+                            android:hint="딸기"
+                            android:padding="15dp"
+                            android:inputType="textPersonName"
+                            android:textSize="18sp" />
+                        <TextView
+                            android:id="@+id/hate_guide"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="싫어요."
+                            android:layout_marginTop="10dp"
+                            android:textColor="#555"
+                            android:textSize="18sp" />
+                        <EditText
+                            android:id="@+id/inputFa1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/border"
+                            android:ems="10"
+                            android:padding="15dp"
+                            android:hint="오이"
+                            android:inputType="textPersonName"
+                            android:textSize="18sp" />
+                        <TextView
+                            android:id="@+id/birthname_guide"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="태명"
+                            android:layout_marginTop="10dp"
+                            android:textColor="#555"
+                            android:textSize="18sp" />
+                        <EditText
+                            android:id="@+id/inputFa2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:ems="10"
+                            android:padding="15dp"
+                            android:hint="꿀땡이"
+                            android:inputType="textPersonName"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="첫 친구의 이름은"
+                            android:textColor="#000"
+                            android:textSize="22sp" />
+
+                        <EditText
+                            android:id="@+id/inputFriend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/border"
+                            android:ems="10"
+                            android:hint="모에요"
+                            android:inputType="textPersonName"
+                            android:paddingLeft="10dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="라고 지었답니다."
+                        android:textColor="#000"
+                        android:textSize="22sp" />
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/confirm_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp"
+            android:background="#7A85B8"
+            android:text="저장하기"
+            android:textColor="#ffffff" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

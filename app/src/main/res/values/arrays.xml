@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gender">
+        <item>남자 아이</item>
+        <item>여자 아이</item>
+    </string-array>
+    <string-array name="yes">
+        <item>참 잘했어요.</item>
+        <item>멋지다!</item>
+        <item>대단해요.</item>
+        <item>야호!</item>
+    </string-array>
+    <string-array name="ok">
+        <item>그렇구나</item>
+        <item>멋지다!</item>
+        <item>좋아!</item>
+        <item>야호!</item>
+    </string-array>
+    <string-array name="type">
+        <item>혼자서도 잘하는 똘똘이</item>
+        <item>따뜻한 마음의 천사</item>
+        <item>욕심 많은 꾸러기</item>
+        <item>얌전한 새침데기</item>
+        <item>자유롭고 활동적인 영혼</item>
+        <item>궁금한게 많은 수다쟁이</item>
+        <item>상상력이 풍부한 꿈쟁이</item>
+        <item>감수성이 뛰어난 울보</item>
+    </string-array>
+    <string-array name="strawberry_q">
+        <item>빨갛고 씨가 많은 과일은 무엇일까요?</item>
+        <item>딸기는 무슨 색이에요?</item>
+        <item>딸기 몇 개 먹고싶어요?</item>
+        <item>딸기는 어디서 사요?</item>
+        <item>딸기는 무슨 맛이에요?</item>
+        <item>딸기는 어떻게 생겼어요?</item>
+        <item>딸기는 누가 먹어요?</item>
+        <item>과일 좋아해요?</item>
+        <item>어떤 과일을 좋아해요?</item>
+    </string-array>
+    <string-array name="strawberry_a">
+        <item>딸기</item>
+        <item>빨간색</item>
+        <item>free</item>
+        <item>과일가게</item>
+        <item>free</item>
+        <item>free</item>
+        <item>free</item>
+        <item>free</item>
+        <item>free</item>
+    </string-array>
+    <string-array name="banana_q">
+        <item>노랗고 길쭉한 과일은 무엇일까요?</item>
+        <item>바나나는 무슨 색이에요?</item>
+        <item>바나나 좋아해요?</item>
+    </string-array>
+    <string-array name="banana_a">
+        <item>바나나</item>
+        <item>노란색</item>
+        <item>free</item>
+    </string-array>
+    <string-array name="turtle_q">
+        <item>엉금엉금 기어가는 동물은 무엇일까요?</item>
+        <item>거북이 좋아해요?</item>
+        <item>거북이는 어떻게 생겼어요?</item>
+    </string-array>
+    <string-array name="turtle_a">
+        <item>거북이</item>
+        <item>free</item>
+        <item>free</item>
+    </string-array>
+    <string-array name="zoo">
+        <item>깡총깡총 뛰는 빠르고 귀가 긴 동물이 있네? 저건 뭘까?</item>
+        <item>어흥 어흥 하고 우는 동물이 있어, 저건 뭘까?</item>
+        <item>엉금엉금 기어다니는 등이 단단하고 느린 동물이야, 저건 뭔지 맞춰봐.</item>
+        <item>목이 길고 얼룩무늬가 있는 동물은 뭘까?</item>
+        <item>코가 길어서 손처럼 움직이는 동물이다! 저건 뭘까?</item>
+    </string-array>
+    <string-array name="zoo_answer">
+        <item>토끼</item>
+        <item>호랑이</item>
+        <item>거북이</item>
+        <item>기린</item>
+        <item>코끼리</item>
+    </string-array>
+    <string-array name="fruits">
+        <item>저기봐, 노란색 기다란 과일이 있네, 저건 뭘까?</item>
+        <item>껍질에 검은색이랑 녹색 줄무늬가 있어, 저건 뭘까?</item>
+        <item>작은 씨가 촘촘히 박혀있는 빨갛고 작은 과일은 뭘까?</item>
+        <item>빨갛고 맨들맨들한 꼭지가 있는 과일은 뭘까?</item>
+        <item>껍질에 검은색이랑 녹색 줄무늬가 있어, 저건 뭘까?</item>
+    </string-array>
+    <string-array name="fruits_answer">
+        <item>바나나</item>
+        <item>수박</item>
+        <item>딸기</item>
+        <item>사과</item>
+        <item>수박</item>
+    </string-array>
+</resources>
