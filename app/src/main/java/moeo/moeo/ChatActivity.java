@@ -1,8 +1,11 @@
 package moeo.moeo;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -49,6 +52,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import moeo.moeo.common.BluetoothActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -56,13 +60,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
+import com.example.egregory.moya.BTSockLE;
 public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
     ListView m_ListView;
     CustomAdapter m_Adapter;
     private TextToSpeech tts;
     private ImageButton btnSpeak;
-    private final int REQ_CODE_SPEECH_INPUT = 100;
+    private static final int REQ_CODE_SPEECH_INPUT = 100;
+    private static final int BLUETOOTH_REQUEST = 0;
     private NfcAdapter mNfcAdapter;
     PendingIntent pIntent;
     IntentFilter[] filters;    String text;
@@ -74,11 +79,34 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private static final String TAG = "ChatActivity";
-
+    BTSockLE m_bt = null;
+    public Context m_ctx   = null;
+    byte[] hcmd   = new byte[8];
+    String stID     = new String("start");
     private ImageButton settingBtn;
 
     boolean isLandScape;
+    interface CMD
+    {
+        int NONE = 0;
+        int COLOR = 1;
+        int BLEND = 2;
+        int SERVO = 3;
+        int EYE = 4;
+        int SERVOS=5;
+    };
 
+    void InitBTNetwork()
+    {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
+
+        // BT socket
+        m_bt = new com.example.egregory.moya.BTSockLE(this);
+        m_bt.m_parent = this;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +121,37 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     0);
         }
         setContentView(R.layout.activity_chat);
+        m_ctx   = getApplicationContext();
+        InitBTNetwork();
+        m_bt.setOnReceive( new BTSockLE.OnReceiveListener()
+        {
+            @Override
+            public int OnReceive(byte b)
+            {
+                int n 		= m_bt.GetLength();
+                byte p[]	= m_bt.GetBuffer();
+                String st=null,tmp=null;
+                for (int i=0;i<n;i++)
+                {
+                    tmp     = String.format("%x,",p[i]);
+                    if (st==null)   st = tmp;
+                    else            st      = st+tmp;
+                }
+
+                if (stID.equals(st)==false)
+                {
+                    stID    = st;
+                    startChat(st);
+                }
+                return 0;
+            }
+
+            @Override
+            public int OnConnect(boolean b)
+            {
+                return 0;
+            }
+        });
 		mNfcAdapter =  NfcAdapter.getDefaultAdapter(this) ;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = this.getWindow();
@@ -100,6 +159,7 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
             window.setStatusBarColor(Color.parseColor("#303F9F"));
         }
         mAuth = FirebaseAuth.getInstance();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
  		if (mNfcAdapter == null) {
             // NFC 미지원단말
@@ -133,7 +193,7 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
         settingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ScanBluetooth();
             }
         });
 
@@ -255,11 +315,128 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 }
                 break;
             }
+            case BLUETOOTH_REQUEST :
+                if (resultCode == Activity.RESULT_OK)
+                {
+                    BluetoothDevice d = data.getParcelableExtra("device");
+                    if (d != null) m_bt.InitClient(d);
+                }
+                break;
 
         }
     }
+    public void ScanBluetooth()
+    {
+        if (!m_bt.Open())
+        {
+            Toast.makeText(m_ctx,"블루투스 장치가 필요합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!m_bt.IsConnected())
+        {
+            Intent bt = new Intent(m_bt.m_parent.getBaseContext(), BluetoothActivity.class);
+            startActivityForResult(bt,BLUETOOTH_REQUEST);
+        }
+    }
+
+    private void startChat(String st){
+        Toast.makeText(m_ctx,st,Toast.LENGTH_SHORT).show();
+    }
+
+    private void sendCmd(String st){
+        com.example.egregory.moya.stdafx.vToken tok  = new com.example.egregory.moya.stdafx.vToken(st);
+        tok.SetSeparator(",");
+
+        if (tok.GetSize()==0)   return;
+        String cmd  = tok.GetAt(0);
+
+        switch(tok.GetSize()){
+            case 3:
+                if (cmd.equals("j"))    // servo motor
+                    Servo(tok.i(1),tok.i(2));
+                else if (cmd.equals("e"))   // eye
+                    SendEye(tok.i(1),tok.i(2));
+                break;
+            case 4:
+                if (cmd.equals("rgb"))
+                    Send(CMD.COLOR,tok.i(1),tok.i(2),tok.i(3));
+                break;
+            case 5:
+                if (cmd.equals("blend"))
+                    Send(CMD.BLEND,tok.i(1),tok.i(2),tok.i(3),tok.i(4));
+                break;
+            case 6:
+                if (cmd.equals("j"))
+                    ServoCnt(tok.i(1),tok.i(2),tok.i(3),tok.i(4),tok.i(5));
+                break;
+        }
+    }
+    public void CRC()
+    {
+        hcmd[0] = (byte)0xf1;
+        byte crc=0;
+        for (int i=1;i<7;i++)
+            crc^=hcmd[i];
+        hcmd[7] = crc;
+    }
+
+    public void Send(int cmd, int r,int g, int b,int d)
+    {
+        hcmd[0] = (byte)0xf1;
+        hcmd[1] = (byte)cmd;
+        hcmd[2] = (byte)(d>>8);
+        hcmd[3] = (byte)r;    hcmd[4] = (byte)g;    hcmd[5] = (byte)b;
+        hcmd[6] = (byte)(d & 0xff);
+        CRC();
+        m_bt.Send(hcmd,8);
+    }
+
+    public void Send(int cmd, int r,int g, int b)
+    {
+        hcmd[0] = (byte)0xf1;
+        hcmd[1] = (byte)cmd;
+        hcmd[2] = 0;
+        hcmd[3] = (byte)r;    hcmd[4] = (byte)g;    hcmd[5] = (byte)b;
+        CRC();
+        m_bt.Send(hcmd,8);
+    }
+
+    public void Servo(int no,int pwm)
+    {
+        hcmd[1] = CMD.SERVO;
+        hcmd[2] = (byte)no;
+
+        if (pwm==0) hcmd[3] = 0;
+        else        hcmd[3] = (byte)( ((float)pwm)*65./100.);
+        CRC();
+        m_bt.Send(hcmd,8);
+    }
+
+    public void ServoCnt(int no,int start,int end, int count, int time)
+    {
+        hcmd[1] = CMD.SERVOS;
+        hcmd[2] = (byte)no;
+
+        hcmd[3] = (byte)start;
+        hcmd[4] = (byte)end;
+        hcmd[5] = (byte)count;
+        hcmd[6] = (byte)time;
+        CRC();
+        m_bt.Send(hcmd,8);
+    }
+
+    public void SendEye(int l,int r)
+    {
+        hcmd[0] = (byte)0xf1;
+        hcmd[1] =  CMD.EYE;
+        hcmd[2] = 0;
+        hcmd[3] = (byte)l;    hcmd[4] = (byte)r;
+        CRC();
+        m_bt.Send(hcmd,8);
+    }
     public void post(String requestURL, String message) {
-        message= "{\"content\":\""+message+"\",\"user_id\":\"user_1\"}";
+        message= "{\"content\":\""+message+"\",\"user_id\":\""+mAuth.getCurrentUser().getUid()+"\"}";
         try{
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
