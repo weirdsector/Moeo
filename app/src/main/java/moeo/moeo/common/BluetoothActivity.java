@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -42,6 +43,8 @@ public class BluetoothActivity extends Activity
                 // Get the BluetoothDevice object from the Intent
                 BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // Add the name and address to an array adapter to show in a ListView
+                Log.i("TESTING1","TESTING1");
+
                 adapter.add(bluetoothDevice.getName() + "\n"
                         + bluetoothDevice.getAddress());
             }
@@ -162,8 +165,12 @@ public class BluetoothActivity extends Activity
             BluetoothServerSocket temp = null;
             try 
             {
+                Log.i("TESTING","TESTING");
+
                 temp = bluetoothAdapter.listenUsingRfcommWithServiceRecord(getString(R.string.app_name), uuid);
             } catch (IOException e) {
+                Log.i("TESTING","ERROR IO");
+
                 e.printStackTrace();
             }
             bluetoothServerSocket = temp;
@@ -177,13 +184,22 @@ public class BluetoothActivity extends Activity
             while (true) 
             {
                 try {
-                    bluetoothSocket = bluetoothServerSocket.accept();
+                    Log.i("TESTING","TRYING");
+
+                    bluetoothSocket = bluetoothServerSocket.accept(3000);
+                    Log.i("TESTING",bluetoothSocket.toString());
+
                 } catch (IOException e) {
+                    Log.i("TESTING","IO2");
+
                     break;
                 }
+
                 // If a connection is accepted
                 if (bluetoothSocket != null)
                 {
+                    Log.i("TESTING","ACCEPTED");
+
                     runOnUiThread(new Runnable() {
                         public void run() {
                             Toast.makeText(getApplicationContext(), "A connection has been accepted.",

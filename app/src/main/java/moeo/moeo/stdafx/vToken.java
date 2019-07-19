@@ -1,4 +1,4 @@
-package com.example.egregory.moya.stdafx;
+package moeo.moeo.stdafx;
 import java.util.StringTokenizer;
 
 public class vToken 

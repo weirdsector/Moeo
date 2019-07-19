@@ -1,4 +1,4 @@
-package com.example.egregory.moya.stdafx;
+package moeo.moeo.stdafx;
 import java.io.UnsupportedEncodingException;
 import java.util.Formatter;
 import java.util.StringTokenizer;

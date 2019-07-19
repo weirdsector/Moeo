@@ -1,4 +1,4 @@
-package com.example.egregory.moya;
+package moeo.moeo.common;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;

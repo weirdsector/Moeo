@@ -1,4 +1,4 @@
-package com.example.egregory.moya.stdafx;
+package moeo.moeo.stdafx;
 
 
 public class vParser 

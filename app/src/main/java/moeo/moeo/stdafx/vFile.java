@@ -1,4 +1,4 @@
-package com.example.egregory.moya.stdafx;
+package moeo.moeo.stdafx;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

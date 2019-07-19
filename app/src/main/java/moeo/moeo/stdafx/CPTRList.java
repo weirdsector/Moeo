@@ -1,4 +1,4 @@
-package com.example.egregory.moya.stdafx;
+package moeo.moeo.stdafx;
 import java.util.ArrayList;
 
 public class CPTRList 

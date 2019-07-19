@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import moeo.moeo.common.BluetoothActivity;
+import moeo.moeo.stdafx.vToken;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -60,7 +61,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import com.example.egregory.moya.BTSockLE;
+import moeo.moeo.common.BTSockLE;
 public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
     ListView m_ListView;
     CustomAdapter m_Adapter;
@@ -104,7 +105,7 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
 
         // BT socket
-        m_bt = new com.example.egregory.moya.BTSockLE(this);
+        m_bt = new BTSockLE(this);
         m_bt.m_parent = this;
     }
     @Override
@@ -183,6 +184,8 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
             @Override
             public void onClick(View arg0) {
+                sendCmd("j,1,30,90,4,40");
+
                 promptSpeechInput();
             }
 
@@ -203,7 +206,6 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
     }
     @Override
     protected void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
 
         Intent i = new Intent(this, ChatActivity.class);
@@ -345,7 +347,7 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
     }
 
     private void sendCmd(String st){
-        com.example.egregory.moya.stdafx.vToken tok  = new com.example.egregory.moya.stdafx.vToken(st);
+        vToken tok  = new vToken(st);
         tok.SetSeparator(",");
 
         if (tok.GetSize()==0)   return;
