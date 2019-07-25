@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.os.Build;
@@ -122,6 +124,8 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     0);
         }
         setContentView(R.layout.activity_chat);
+        AudioManager     am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        am.startBluetoothSco();
         m_ctx   = getApplicationContext();
         InitBTNetwork();
         m_bt.setOnReceive( new BTSockLE.OnReceiveListener()
@@ -343,7 +347,7 @@ public class ChatActivity extends AppCompatActivity implements TextToSpeech.OnIn
     }
 
     private void startChat(String st){
-        Toast.makeText(m_ctx,st,Toast.LENGTH_SHORT).show();
+       Log.e("!!!!!!!!!!!!!!!!!!!",st);
     }
 
     private void sendCmd(String st){

@@ -90,18 +90,6 @@ public class BingleActivity extends AppCompatActivity implements TextToSpeech.On
                   }
               }
         );
-//
-//
-//        findViewById(R.id.button2).setOnClickListener(new Button.OnClickListener() {
-//                                                          @Override
-//                                                          public void onClick(View v) {
-//                                                              EditText editText = (EditText) findViewById(R.id.editText1) ;
-//                                                              String inputValue = editText.getText().toString() ;
-//                                                              editText.setText("");
-//                                                              refresh(inputValue,1);
-//                                                          }
-//                                                      }
-//        );
         momRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
@@ -171,7 +159,6 @@ public class BingleActivity extends AppCompatActivity implements TextToSpeech.On
     }
     @Override
     protected void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
 
         Intent i = new Intent(this, ChatActivity.class);
